@@ -5,6 +5,11 @@ enum {
   AM_CONTROLLER = 88
 };
 
+typedef nx_struct ControllerMsg {
+  nx_uint8_t type;
+  nx_uint16_t value;
+} controller_msg_t;
+
 msp430_uart_union_config_t config1 = {
   {
     utxe: 1,

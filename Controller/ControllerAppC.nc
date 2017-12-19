@@ -1,4 +1,3 @@
-#include <Timer.h>
 #include "Controller.h"
 
 configuration ControllerAppC {
@@ -7,13 +6,11 @@ implementation {
   components MainC;
   components LedsC;
   components ControllerC;
-  components new TimerMilliC() as Timer0;
   components ActiveMessageC as AM;
-  components new CarC();
+  components CarC;
 
   ControllerC.Boot -> MainC;
   ControllerC.Leds -> LedsC;
-  ControllerC.Timer0 -> Timer0;
   Controller.Car -> CarC;
 
   ControllerC.Packet -> AM;
