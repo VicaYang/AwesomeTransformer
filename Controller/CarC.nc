@@ -1,31 +1,17 @@
-interface Car {
-  command void Start();
-  command	error_t Angle(uint16_t value);
-  command	error_t Angle_Senc(uint16_t value);
-  command	error_t Angle_Third(uint16_t value);
-  command	error_t Forward(uint16_t value);
-  command	error_t Back(uint16_t value);
-  command	error_t Left(uint16_t value);
-  command	error_t QueryReader(uint16_t value);
-  command	error_t Pause();
-  event void readDone(error_t state, uint16_t data);
-  command	error_t InitMaxSpeed(uint16_t value);
-  command	error_t InitMinSpeed(uint16_t value);
-  command	error_t InitLeftServo(uint16_t value);
-  command	error_t InitRightServo(uint16_t value);
-  command	error_t InitMidServo(uint16_t value);
-}
-
-module CarC {
+#include "msp430usart.h"
+configuration CarC {
 	provides {
     interface Car;
 	}
-  uses {
-    interface HplMsp430Usart;
-    interface HplMsp430UsartInterrupts;
-    interface Resource;
-    interface HplMsp430GeneralIOC;
-  }
 } implementation {
+  components CarP;
+  Car = CarP;
 
+  components HplMsp430Usart0C;
+  components Msp430Uart0C;
+  components HplMsp430GeneralIOC
+  CarP.HplMsp430Usart -> HplMsp430Usart0C;
+  CarP.HplMsp430UsartInterrupts -> HplMsp430Usart0C;
+  CarP.Resource -> Msp430UartOC;
+  CarP.HplMsp430GeneralIOC -> HplMsp430GeneralIOC.Port20;
 }
