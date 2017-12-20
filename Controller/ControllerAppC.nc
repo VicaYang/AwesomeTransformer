@@ -11,10 +11,10 @@ implementation {
 
   ControllerC.Boot -> MainC;
   ControllerC.Leds -> LedsC;
-  Controller.Car -> CarC;
+  ControllerC.Car -> CarC;
 
   ControllerC.Packet -> AM;
-  ControllerC.AMPacket -> AM.Packet;
+  ControllerC.AMPacket -> AM.AMPacket;
   ControllerC.AMControl -> AM;
   ControllerC.AMSend -> AM.AMSend[AM_CONTROLLER];
   ControllerC.Receive -> AM.Receive[AM_CONTROLLER];
