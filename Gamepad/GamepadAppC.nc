@@ -8,6 +8,8 @@ configuration GamepadAppC {
   components GamepadC;
   components new TimerMilliC() as Timer0;
   components ActiveMessageC as AM;
+  components ButtonC;
+  components new JoyStickC();
 
   GamepadC.Boot -> MainC;
   GamepadC.Leds -> LedsC;
@@ -17,5 +19,8 @@ configuration GamepadAppC {
   GamepadC.AMPacket -> AM.Packet;
   GamepadC.AMControl -> AM;
   GamepadC.AMSend -> AM.AMSend[AM_CONTROLLER];
-  GamepadC.Receive -> AM.Receive[AM_CONTROLLER];
+
+  GamepadC.Button -> ButtonC;
+  GamepadC.readX -> JoyStickC.readX;
+  GamepadC.readY -> JoyStickC.readY;
 }

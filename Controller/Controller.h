@@ -2,7 +2,8 @@
 #define CONTROLLER_H
 
 enum {
-  AM_CONTROLLER = 88
+  AM_CONTROLLER = 88,
+  CAR_NODE = 0
 };
 
 typedef nx_struct ControllerMsg {

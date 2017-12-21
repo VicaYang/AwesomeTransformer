@@ -65,8 +65,8 @@ implementation {
     }
     return msg;
   }
-  event void Car.readDone(error_t state, uint16_t data) {
-    if (state == SUCCESS) {
+  event void Car.readDone(error_t error, uint8_t data) {
+    if (error == SUCCESS) {
       call Leds.set(data);
     }
   }
