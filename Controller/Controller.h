@@ -10,7 +10,7 @@ typedef nx_struct ControllerMsg {
   nx_uint16_t value;
 } controller_msg_t;
 
-msp430_uart_union_config_t config1 = {
+const msp430_uart_union_config_t config1 = {
   {
     utxe: 1,
     urxe: 1,

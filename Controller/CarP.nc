@@ -4,7 +4,7 @@ module CarP @safe() {
 	provides {
     interface Car;
 	}
- z uses {
+  uses {
     interface HplMsp430Usart;
     interface HplMsp430UsartInterrupts;
     interface Resource;

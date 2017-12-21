@@ -1,7 +1,7 @@
 #include <Timer.h>
-#include "BlinkToRadio.h"
+#include "../Controller/Controller.h"
 
-module BlinkToRadioC {
+module GamepadC {
   uses interface Boot;
   uses interface Leds;
   uses interface Timer<TMilli> as Timer0;
@@ -10,8 +10,7 @@ module BlinkToRadioC {
   uses interface AMSend;
   uses interface Receive;
   uses interface SplitControl as AMControl;
-}
-implementation {
+} implementation {
 
   uint16_t counter;
   message_t pkt;
