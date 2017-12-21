@@ -58,14 +58,14 @@ implementation {
         case 0x07:
           call Car.Angle_Senc(btrpkt->value);
           break;
-        case 0x08sss:
+        case 0x08:
           call Car.Angle_Third(btrpkt->value);
           break;
       }
     }
     return msg;
   }
-  event void readDone(error_t state, uint16_t data) {
+  event void Car.readDone(error_t state, uint16_t data) {
     if (state == SUCCESS) {
       call Leds.set(data);
     }

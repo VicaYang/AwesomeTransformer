@@ -1,4 +1,4 @@
-#include "msp430usart.h"
+#include <msp430usart.h>
 configuration CarC {
 	provides {
     interface Car;
@@ -8,10 +8,10 @@ configuration CarC {
   Car = CarP;
 
   components HplMsp430Usart0C;
-  components Msp430Uart0C;
-  components HplMsp430GeneralIOC
+  components new Msp430Uart0C();
+  components HplMsp430GeneralIOC;
   CarP.HplMsp430Usart -> HplMsp430Usart0C;
   CarP.HplMsp430UsartInterrupts -> HplMsp430Usart0C;
-  CarP.Resource -> Msp430UartOC;
-  CarP.HplMsp430GeneralIOC -> HplMsp430GeneralIOC.Port20;
+  CarP.Resource -> Msp430Uart0C;
+  CarP.HplMsp430GeneralIO -> HplMsp430GeneralIOC.Port20;
 }
