@@ -1,2 +1,2 @@
-COMPONENT=BlinkToRadioAppC
+COMPONENT=GamepadAppC
 include $(MAKERULES)

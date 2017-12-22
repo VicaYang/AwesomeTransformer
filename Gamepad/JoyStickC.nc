@@ -5,8 +5,8 @@ generic configuration JoyStickC() {
     interface Read<uint16_t> as readY;
   }
 } implementation {
-  components AdcReadClientC as Xadc;
-  components AdcReadClientC as Yadc;
+  components new AdcReadClientC() as Xadc;
+  components new AdcReadClientC() as Yadc;
   components JoyStickP;
   readX = Xadc.Read;
   readY = Yadc.Read;

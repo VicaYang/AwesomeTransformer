@@ -3,7 +3,7 @@ interface Button {
   command void start();
   event void startDone(error_t error);
   command void stop();
-  event void stopDoen(error_t error);
+  event void stopDone(error_t error);
   command void pinvalueA();
   command void pinvalueB();
   command void pinvalueC();

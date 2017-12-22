@@ -16,7 +16,7 @@ configuration GamepadAppC {
   GamepadC.Timer0 -> Timer0;
 
   GamepadC.Packet -> AM;
-  GamepadC.AMPacket -> AM.Packet;
+  GamepadC.AMPacket -> AM.AMPacket;
   GamepadC.AMControl -> AM;
   GamepadC.AMSend -> AM.AMSend[AM_CONTROLLER];
 

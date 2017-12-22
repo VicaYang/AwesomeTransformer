@@ -13,55 +13,55 @@ module ButtonP @safe() {
     interface HplMsp430GeneralIO as PortF;
   }
 } implementation {
-  command void pinvalueA() {
+  command void Button.pinvalueA() {
     error_t error = SUCCESS;
-    bool isPressed = call PortA.get()
-    signal pinvalueADone(error, isPressed);
+    bool isPressed = call PortA.get();
+    signal Button.pinvalueADone(error, isPressed);
   }
-  command void pinvalueB() {
+  command void Button.pinvalueB() {
     error_t error = SUCCESS;
-    bool isPressed = call PortB.get()
-    signal pinvalueBDone(error, isPressed);
+    bool isPressed = call PortB.get();
+    signal Button.pinvalueBDone(error, isPressed);
   }
-  command void pinvalueC() {
+  command void Button.pinvalueC() {
     error_t error = SUCCESS;
-    bool isPressed = call PortC.get()
-    signal pinvalueCDone(error, isPressed);
+    bool isPressed = call PortC.get();
+    signal Button.pinvalueCDone(error, isPressed);
   }
-  command void pinvalueD() {
+  command void Button.pinvalueD() {
     error_t error = SUCCESS;
-    bool isPressed = call PortD.get()
-    signal pinvalueDDone(error, isPressed);
+    bool isPressed = call PortD.get();
+    signal Button.pinvalueDDone(error, isPressed);
   }
-  command void pinvalueE() {
+  command void Button.pinvalueE() {
     error_t error = SUCCESS;
-    bool isPressed = call PortE.get()
-    signal pinvalueEDone(error, isPressed);
+    bool isPressed = call PortE.get();
+    signal Button.pinvalueEDone(error, isPressed);
   }
-  command void pinvalueF() {
+  command void Button.pinvalueF() {
     error_t error = SUCCESS;
-    bool isPressed = call PortF.get()
-    signal pinvalueFDone(error, isPressed);
+    bool isPressed = call PortF.get();
+    signal Button.pinvalueFDone(error, isPressed);
   }
 
   command void Button.start() {
-    call PortA.clr()
-    call PortA.makeInput();
-    call PortB.clr()
-    call PortB.makeInput();
-    call PortC.clr()
-    call PortC.makeInput();
-    call PortD.clr()
-    call PortD.makeInput();
-    call PortE.clr()
-    call PortE.makeInput();
-    call PortF.clr()
-    call PortF.makeInput();
     error_t error = SUCCESS;
+    call PortA.clr();
+    call PortA.makeInput();
+    call PortB.clr();
+    call PortB.makeInput();
+    call PortC.clr();
+    call PortC.makeInput();
+    call PortD.clr();
+    call PortD.makeInput();
+    call PortE.clr();
+    call PortE.makeInput();
+    call PortF.clr();
+    call PortF.makeInput();
     signal Button.startDone(error);
   }
   command void Button.stop() {
     error_t error = SUCCESS;
-    signal Button.startDone(error);
+    signal Button.stopDone(error);
   }
 }

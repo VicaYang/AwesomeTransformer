@@ -3,8 +3,6 @@ module JoyStickP @safe() {
     interface AdcConfigure<const msp430adc12_channel_config_t*> as Xconf;
     interface AdcConfigure<const msp430adc12_channel_config_t*> as Yconf;
   }
-  uses {
-  }
 } implementation {
   const msp430adc12_channel_config_t config1 = {
     inch: INPUT_CHANNEL_A6,
@@ -12,7 +10,7 @@ module JoyStickP @safe() {
     ref2_5v: REFVOLT_LEVEL_2_5,
     adc12ssel: SHT_SOURCE_ACLK,
     adc12div: SHT_CLOCK_DIV_1,
-    sth: SAMPLE_HOLD_4_CYCLES,
+    sht: SAMPLE_HOLD_4_CYCLES,
     sampcon_ssel: SAMPCON_SOURCE_SMCLK,
     sampcon_id: SAMPCON_CLOCK_DIV_1
   };
@@ -22,7 +20,7 @@ module JoyStickP @safe() {
     ref2_5v: REFVOLT_LEVEL_2_5,
     adc12ssel: SHT_SOURCE_ACLK,
     adc12div: SHT_CLOCK_DIV_1,
-    sth: SAMPLE_HOLD_4_CYCLES,
+    sht: SAMPLE_HOLD_4_CYCLES,
     sampcon_ssel: SAMPCON_SOURCE_SMCLK,
     sampcon_id: SAMPCON_CLOCK_DIV_1
   };

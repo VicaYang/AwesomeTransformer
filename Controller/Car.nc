@@ -2,7 +2,7 @@
 #include <msp430usart.h>
 
 interface Car {
-  command void Start();
+  command void start();
   command	error_t Angle(uint16_t value);
   command	error_t Angle_Senc(uint16_t value);
   command	error_t Angle_Third(uint16_t value);
@@ -12,7 +12,7 @@ interface Car {
   command error_t Right(uint16_t value);
 //  command	error_t QueryReader(uint16_t value); // modified
   command	error_t Pause();
-  async command read();
+  async command void read();
   event void readDone(error_t state, uint8_t data);
   command	error_t InitMaxSpeed(uint16_t value);
   command	error_t InitMinSpeed(uint16_t value);

@@ -20,32 +20,34 @@ module CarP @safe() {
   uint16_t angel2;
   uint16_t angel3;
 
-  const msp430_uart_union_config_t config1 = {
-    utxe: 1,
-    urxe: 1,
-    ubr: UBR_1MHZ_115200,
-    umctl: UMCTL_1MHZ_115200,
-    ssel: 0x02,
-    pena: 0,
-    pev: 0,
-    clen: 1,
-    listen: 0,
-    mm: 0,
-    ckpl: 0,
-    urxse: 0,
-    urxeie: 0,
-    urxwie: 0,
-    utxe: 1,
-    urxe: 1
+  msp430_uart_union_config_t config1 = {
+    {
+      utxe: 1,
+      urxe: 1,
+      ubr: UBR_1MHZ_115200,
+      umctl: UMCTL_1MHZ_115200,
+      ssel: 0x02,
+      pena: 0,
+      pev: 0,
+      clen: 1,
+      listen: 0,
+      mm: 0,
+      ckpl: 0,
+      urxse: 0,
+      urxeie: 0,
+      urxwie: 0,
+      utxe: 1,
+      urxe: 1
+    }
   };
 
   async event void HplMsp430UsartInterrupts.rxDone(uint8_t data) {
   }
   async event void HplMsp430UsartInterrupts.txDone() {
   }
-  async command void read() {
+  async command void Car.read() {
     error_t error = SUCCESS;
-    signal readDone(error, type);
+    signal Car.readDone(error, type);
   }
 // Anyone tell me what the hell are these three angle?
   command void Car.start() {
@@ -117,10 +119,10 @@ module CarP @safe() {
     return call Resource.request();
   }
 // What should I do. 
-  command	error_t Car.QueryReader(uint16_t value) {
-    type = 0x00;
-    return SUCCESS;
-  }
+//  command	error_t Car.QueryReader(uint16_t value) {
+//    type = 0x00;
+//    return SUCCESS;
+//  }
   command	error_t Car.Pause() {
     type = 0x06;
     m_value = 0x0000;
@@ -155,7 +157,9 @@ module CarP @safe() {
   event void Resource.granted() {
     call HplMsp430Usart.setModeUart(&config1);
     call HplMsp430Usart.enableUart();
-    U0CTL &= ~SYNC; // how?
+    atomic {
+      U0CTL &= ~SYNC;
+    }
     call HplMsp430Usart.tx(0x01);
     while (!call HplMsp430Usart.isTxEmpty());
     call HplMsp430Usart.tx(0x02);
