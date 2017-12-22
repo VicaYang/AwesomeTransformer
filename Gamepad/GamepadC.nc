@@ -27,12 +27,14 @@ module GamepadC {
   void sendPkt() {
     if (!busy) {
       controller_msg_t* btrpkt = (controller_msg_t*)(call Packet.getPayload(&pkt, sizeof(controller_msg_t)));
+      btn[0] = btn[1] = btn[2] = btn[3] = btn[4] = btn[5] = FALSE;
       if (btrpkt == NULL) {
       	return;
       }
+      call Leds.led0Toggle();
       btrpkt->type = type;
       btrpkt->value = value;
-      if (call AMSend.send(CAR_NODE, &pkt, sizeof(controller_msg_t)) == SUCCESS) {
+      if (call AMSend.send(AM_BROADCAST_ADDR, &pkt, sizeof(controller_msg_t)) == SUCCESS) {
         busy = TRUE;
       }
     }
@@ -40,27 +42,32 @@ module GamepadC {
   void check() {
     if ( ! (rd[0] && rd[1] && rd[2] && rd[3] && rd[4] && rd[5] && rd[6] && rd[7]) ) return;
     rd[0] = rd[1] = rd[2] = rd[3] = rd[4] = rd[5] = rd[6] = rd[7] = FALSE;
+    // crazy direction with led......
     if (x < XMIN) { // Forward
       type = 0x02;
-      value = (XMIN - x) / 2;
+      value = (XMIN - x);
+      stop = FALSE;
       sendPkt();
       return;
     } 
     if (x > XMAX) { // Backword
       type = 0x03;
-      value = (x - XMAX) / 2;
+      value = (x - XMAX);
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (y < YMIN) { // Left
       type = 0x04;
-      value = (YMIN - y) / 2;
+      value = (YMIN - y);
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (y > YMAX) { // Right
       type = 0x05;
-      value = (y - YMAX) / 2;
+      value = (y - YMAX);
+      stop = FALSE;
       sendPkt();
       return;
     }
@@ -71,39 +78,52 @@ module GamepadC {
       sendPkt();
       return;
     }
+    if (btn[0] == TRUE && btn[2] == TRUE && btn[4] == TRUE) {
+      type = 0x10;
+      value = 0;
+      stop = FALSE;
+      sendPkt();
+      return;
+    }
     if (btn[0] == TRUE) {
       type = 0x01;
       value = 0;
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (btn[1] == TRUE) {
       type = 0x01;
       value = 1;
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (btn[2] == TRUE) {
       type = 0x07;
       value = 0;
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (btn[3] == TRUE) {
       type = 0x07;
       value = 1;
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (btn[4] == TRUE) {
       type = 0x08;
       value = 0;
+      stop = FALSE;
       sendPkt();
       return;
     }
     if (btn[5] == TRUE) {
       type = 0x08;
       value = 1;
+      stop = FALSE;
       sendPkt();
       return;
     }
@@ -112,7 +132,9 @@ module GamepadC {
   event void Boot.booted() {
     busy = FALSE;
     stop = TRUE;
+    call Leds.set(7);
     rd[0] = rd[1] = rd[2] = rd[3] = rd[4] = rd[5] = rd[6] = rd[7] = FALSE;
+    btn[0] = btn[1] = btn[2] = btn[3] = btn[4] = btn[5] = FALSE;
     call AMControl.start();
     call Timer0.startPeriodic(INTERVAL);
   }
@@ -155,66 +177,54 @@ module GamepadC {
     if (error != SUCCESS) {
       call Button.pinvalueA();
     } else {
-      if (isPressed == TRUE) {
-        btn[0] = isPressed;
-        rd[0] = TRUE;
-        check();
-      }
+      rd[0] = TRUE;
+      btn[0] = isPressed;
+      check();
     }
   }
   event void Button.pinvalueBDone(error_t error, bool isPressed) {
     if (error != SUCCESS) {
-      call Button.pinvalueA();
+      call Button.pinvalueB();
     } else {
-      if (isPressed == TRUE) {
-        btn[1] = isPressed;
-        rd[1] = TRUE;
-        check();
-      }
+      rd[1] = TRUE;
+      btn[1] = isPressed;
+      check();
     }
   }
   event void Button.pinvalueCDone(error_t error, bool isPressed) {
     if (error != SUCCESS) {
-      call Button.pinvalueA();
+      call Button.pinvalueC();
     } else {
-      if (isPressed == TRUE) {
-        btn[2] = isPressed;
-        rd[2] = TRUE;
-        check();
-      }
+      rd[2] = TRUE;
+      btn[2] = isPressed;
+      check();
     }
   }
   event void Button.pinvalueDDone(error_t error, bool isPressed) {
     if (error != SUCCESS) {
-      call Button.pinvalueA();
+      call Button.pinvalueD();
     } else {
-      if (isPressed == TRUE) {
-        btn[3] = isPressed;
-        rd[3] = TRUE;
-        check();
-      }
+      rd[3] = TRUE;
+      btn[3] = isPressed;
+      check();
     }
   }
   event void Button.pinvalueEDone(error_t error, bool isPressed) {
     if (error != SUCCESS) {
-      call Button.pinvalueA();
+      call Button.pinvalueE();
     } else {
-      if (isPressed == TRUE) {
-        btn[4] = isPressed;
-        rd[4] = TRUE;
-        check();
-      }
+      rd[4] = TRUE;
+      btn[4] = isPressed;
+      check();
     }
   }
   event void Button.pinvalueFDone(error_t error, bool isPressed) {
     if (error != SUCCESS) {
-      call Button.pinvalueA();
+      call Button.pinvalueF();
     } else {
-      if (isPressed == TRUE) {
-        btn[5] = isPressed;
-        rd[5] = TRUE;
-        check();
-      }
+      rd[5] = TRUE;
+      btn[5] = isPressed;
+      check();
     }
   }
 
@@ -237,3 +247,4 @@ module GamepadC {
     }
   }
 }
+

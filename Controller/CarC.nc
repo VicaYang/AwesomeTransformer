@@ -6,6 +6,9 @@ configuration CarC {
 } implementation {
   components CarP;
   Car = CarP;
+  
+  components new TimerMilliC() as Timer0;
+  CarP.Timer0 -> Timer0;
 
   components HplMsp430Usart0C;
   components new Msp430Uart0C();

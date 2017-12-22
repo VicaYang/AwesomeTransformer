@@ -10,6 +10,7 @@ module CarP @safe() {
     interface HplMsp430UsartInterrupts;
     interface Resource;
     interface HplMsp430GeneralIO;
+    interface Timer<TMilli> as Timer0;
   }
 } implementation {
   uint8_t type;
@@ -21,6 +22,7 @@ module CarP @safe() {
   uint16_t angel1;
   uint16_t angel2;
   uint16_t angel3;
+  uint8_t homing_cnt;
 
   msp430_uart_union_config_t config1 = {
     {
@@ -42,7 +44,29 @@ module CarP @safe() {
       urxe: 1
     }
   };
-
+  event void Timer0.fired() {
+    homing_cnt++;
+    switch(homing_cnt) {
+      case 1:
+        angel1 = 3200;
+        call Car.InitLeftServo(angel1);
+        call Timer0.startOneShot(400);
+        break;
+      case 2:
+        angel2 = 2400;
+        call Car.InitMidServo(angel2);
+        call Timer0.startOneShot(400);
+        break;
+      case 3:
+        angel3 = 3400;
+        call Car.InitRightServo(angel3);
+        call Timer0.startOneShot(400);
+        break;
+      default:
+        homing_cnt = 0;
+        break;
+    }
+  }
   async event void HplMsp430UsartInterrupts.rxDone(uint8_t data) {
   }
   async event void HplMsp430UsartInterrupts.txDone() {
@@ -56,26 +80,27 @@ module CarP @safe() {
     angel2 = 3400;
     angel3 = 3400;
     min_angel = 1800;
-    max_angel = 5200;
-    call Car.InitMaxSpeed(800);
+    max_angel = 5000;
+    homing_cnt = 0;
+    call Car.InitMaxSpeed(1600);
     call Car.InitMinSpeed(0);
-    call Car.InitLeftServo(angel1);
-    call Car.InitMidServo(angel2);
-    call Car.InitRightServo(angel3);
+    call Timer0.startOneShot(400);
   }
   command error_t Car.Angle(uint16_t value) {
     atomic {
       type = 0x01;
       if (value == 1) {
-        angel1 -= 100;
+        angel1 -= 200;
         if (angel1 < min_angel) {
           angel1 = min_angel;
         }
-      } else {
-        angel1 += 100;
+      } else if (value == 0) {
+        angel1 += 200;
         if (angel1 > max_angel) {
           angel1 = max_angel;
         }
+      } else if (value >= min_angel) {
+        angel1 = value;
       }
     }
     m_value = angel1;
@@ -85,15 +110,17 @@ module CarP @safe() {
     atomic {
       type = 0x07;
       if (value == 1) {
-        angel2 -= 100;
+        angel2 -= 200;
         if (angel2 < min_angel) {
           angel2 = min_angel;
         }
-      } else {
-        angel2 += 100;
+      } else if (value == 0) {
+        angel2 += 200;
         if (angel2 > max_angel) {
           angel2 = max_angel;
         }
+      } else if (value >= min_angel) {
+          angel2 = value;
       }
       m_value = angel2;
     }
@@ -103,15 +130,17 @@ module CarP @safe() {
     atomic {
       type = 0x08;
       if (value == 1) {
-        angel3 -= 100;
+        angel3 -= 200;
         if (angel3 < min_angel) {
           angel3 = min_angel;
         }
-      } else {
-        angel3 += 100;
+      } else if (value == 0) {
+        angel3 += 200;
         if (angel3 > max_angel) {
           angel3 = max_angel;
         }
+      } else if (value >= min_angel) {
+        angel3 = value;
       }
       m_value = angel3;
     }
@@ -160,7 +189,11 @@ module CarP @safe() {
     }
     return call Resource.request();
   }
-
+  command error_t Car.Home() {
+    error_t error = SUCCESS;
+    call Timer0.startOneShot(300);
+    return error;
+  }
   command	error_t Car.InitMaxSpeed(uint16_t value) {
     max_speed = value;
     return SUCCESS;
@@ -169,7 +202,6 @@ module CarP @safe() {
     min_speed = value;
     return SUCCESS;
   }
-// Anyone tell me what should I do with these three function?
   command	error_t Car.InitLeftServo(uint16_t value) {
     atomic {
       type = 0x01;
@@ -196,23 +228,23 @@ module CarP @safe() {
     call HplMsp430Usart.enableUart();
     atomic {
       U0CTL &= ~SYNC;
+      call HplMsp430Usart.tx(0x01);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(0x02);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(type);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(m_value / 256);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(m_value % 256);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(0xFF);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(0xFF);
+      while (!call HplMsp430Usart.isTxEmpty());
+      call HplMsp430Usart.tx(0x00);
+      while (!call HplMsp430Usart.isTxEmpty());
     }
-    call HplMsp430Usart.tx(0x01);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(0x02);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(type);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(m_value / 256);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(m_value % 256);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(0xFF);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(0xFF);
-    while (!call HplMsp430Usart.isTxEmpty());
-    call HplMsp430Usart.tx(0x00);
-    while (!call HplMsp430Usart.isTxEmpty());
     call Resource.release();
   }
 }

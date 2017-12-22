@@ -12,6 +12,7 @@ interface Car {
   command error_t Right(uint16_t value);
 //  command	error_t QueryReader(uint16_t value); // modified
   command	error_t Pause();
+  command error_t Home();
   async command void read();
   event void readDone(error_t state, uint8_t data);
   command	error_t InitMaxSpeed(uint16_t value);

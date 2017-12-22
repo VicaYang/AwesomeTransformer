@@ -18,9 +18,10 @@ implementation {
   bool busy = FALSE;
 
   event void Boot.booted() {
+    call Leds.set(7);
     call AMControl.start();
     call Car.start();
-    call Timer0.startPeriodic(1000);
+    call Timer0.startOneShot(1500);//display mode
   }
 
   event void AMControl.startDone(error_t err) {
@@ -35,23 +36,49 @@ implementation {
   event void AMSend.sendDone(message_t* msg, error_t err) {
   }
   event void Timer0.fired() {
-    counter++;
-    if (counter % 5 == 0) {
-      call Car.Forward(300);
-    }
-    if (counter % 5 == 1) {
-      call Car.Backward(300);
-    }
-    if (counter % 5 == 2) {
-      call Car.Left(300);
-    }
-    if (counter % 5 == 3) {
-      call Car.Right(300);
-    }
-    if (counter % 5 == 4) {
-      call Car.Pause();
+    switch(counter) {
+      case 0:
+        call Car.Forward(800);
+        break;
+      case 1:
+        call Car.Backward(800);
+        break;
+      case 2:
+        call Car.Left(800);
+        break;
+      case 3:
+        call Car.Right(800);
+        break;
+      case 4:
+        call Car.Pause();
+        break;
+      case 5:
+        call Car.Angle(2400);
+        break;
+      case 6:
+        call Car.Angle(4400);
+        break;
+      case 7:
+        call Car.Angle_Senc(2400);
+        break;
+      case 8:
+        call Car.Angle_Senc(4400);
+        break;
+      case 9:
+        call Car.Angle_Third(2400);
+        break;
+      case 10:
+        call Car.Angle_Third(4400);
+        break;
+      case 11:
+        call Car.Home();
+        break;
     }
     call Car.read();
+    counter++;
+    if (counter < 12) {
+      call Timer0.startOneShot(2000);
+    }
   }
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
     if (len == sizeof(controller_msg_t)) {
@@ -80,6 +107,9 @@ implementation {
           break;
         case 0x08:
           call Car.Angle_Third(btrpkt->value);
+          break;
+        case 0x10:
+          call Car.Home();
           break;
       }
     }

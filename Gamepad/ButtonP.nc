@@ -13,34 +13,35 @@ module ButtonP @safe() {
     interface HplMsp430GeneralIO as PortF;
   }
 } implementation {
+  bool isPressed;
   command void Button.pinvalueA() {
     error_t error = SUCCESS;
-    bool isPressed = call PortA.get();
+    isPressed = call PortA.get();
     signal Button.pinvalueADone(error, isPressed);
   }
   command void Button.pinvalueB() {
     error_t error = SUCCESS;
-    bool isPressed = call PortB.get();
+    isPressed = call PortB.get();
     signal Button.pinvalueBDone(error, isPressed);
   }
   command void Button.pinvalueC() {
     error_t error = SUCCESS;
-    bool isPressed = call PortC.get();
+    isPressed = call PortC.get();
     signal Button.pinvalueCDone(error, isPressed);
   }
   command void Button.pinvalueD() {
     error_t error = SUCCESS;
-    bool isPressed = call PortD.get();
+    isPressed = call PortD.get();
     signal Button.pinvalueDDone(error, isPressed);
   }
   command void Button.pinvalueE() {
     error_t error = SUCCESS;
-    bool isPressed = call PortE.get();
+    isPressed = call PortE.get();
     signal Button.pinvalueEDone(error, isPressed);
   }
   command void Button.pinvalueF() {
     error_t error = SUCCESS;
-    bool isPressed = call PortF.get();
+    isPressed = call PortF.get();
     signal Button.pinvalueFDone(error, isPressed);
   }
 
