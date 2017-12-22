@@ -56,8 +56,8 @@ module CarP @safe() {
     call Car.InitMaxSpeed(800);
     call Car.InitMinSpeed(0);
     call Car.InitLeftServo(angel1);
-    call Car.InitRightServo(angel2);
-    call Car.InitLeftServo(angel3);
+    call Car.InitMidServo(angel2);
+    call Car.InitRightServo(angel3);
   }
   command error_t Car.Angle(uint16_t value) {
     atomic {
@@ -149,18 +149,24 @@ module CarP @safe() {
   }
 // Anyone tell me what should I do with these three function?
   command	error_t Car.InitLeftServo(uint16_t value) {
-    type = 0x01;
-    m_value = value;
+    atomic {
+      type = 0x01;
+      m_value = value;
+    }
     return call Resource.request();
   }
   command	error_t Car.InitRightServo(uint16_t value) {
-    type = 0x07;
-    m_value = value;
+    atomic {
+      type = 0x07;
+      m_value = value;
+    }
     return call Resource.request();
   }
   command	error_t Car.InitMidServo(uint16_t value) {
-    type = 0x08;
-    m_value = value;
+    atomic {
+      type = 0x08;
+      m_value = value;
+    }
     return call Resource.request();
   }
   event void Resource.granted() {
