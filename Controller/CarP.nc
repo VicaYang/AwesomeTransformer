@@ -16,6 +16,8 @@ module CarP @safe() {
   uint16_t m_value;
   uint16_t max_speed;
   uint16_t min_speed;
+  uint16_t min_angel;
+  uint16_t max_angel;
   uint16_t angel1;
   uint16_t angel2;
   uint16_t angel3;
@@ -50,9 +52,11 @@ module CarP @safe() {
     signal Car.readDone(error, type);
   }
   command void Car.start() {
-    angel1 = 1800;
-    angel2 = 1800;
-    angel3 = 1800;
+    angel1 = 3400;
+    angel2 = 3400;
+    angel3 = 3400;
+    min_angel = 1800;
+    max_angel = 5200;
     call Car.InitMaxSpeed(800);
     call Car.InitMinSpeed(0);
     call Car.InitLeftServo(angel1);
@@ -64,8 +68,14 @@ module CarP @safe() {
       type = 0x01;
       if (value == 1) {
         angel1 -= 100;
+        if (angel1 < min_angel) {
+          angel1 = min_angel;
+        }
       } else {
         angel1 += 100;
+        if (angel1 > max_angel) {
+          angel1 = max_angel;
+        }
       }
     }
     m_value = angel1;
@@ -76,8 +86,14 @@ module CarP @safe() {
       type = 0x07;
       if (value == 1) {
         angel2 -= 100;
+        if (angel2 < min_angel) {
+          angel2 = min_angel;
+        }
       } else {
         angel2 += 100;
+        if (angel2 > max_angel) {
+          angel2 = max_angel;
+        }
       }
       m_value = angel2;
     }
@@ -88,8 +104,14 @@ module CarP @safe() {
       type = 0x08;
       if (value == 1) {
         angel3 -= 100;
+        if (angel3 < min_angel) {
+          angel3 = min_angel;
+        }
       } else {
         angel3 += 100;
+        if (angel3 > max_angel) {
+          angel3 = max_angel;
+        }
       }
       m_value = angel3;
     }
