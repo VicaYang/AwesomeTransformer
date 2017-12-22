@@ -9,7 +9,7 @@ enum {
   XMAX = 4095 - THRESHOLD,
   YMIN = THRESHOLD,
   YMAX = 4095 - THRESHOLD,
-  INTERVAL = 250
+  INTERVAL = 500
 };
 
 typedef nx_struct ControllerMsg {

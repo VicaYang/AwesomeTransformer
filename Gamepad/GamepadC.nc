@@ -127,7 +127,14 @@ module GamepadC {
   }
 
   event void Timer0.fired() {
-
+    call Button.pinvalueA();
+    call Button.pinvalueB();
+    call Button.pinvalueC();
+    call Button.pinvalueD();
+    call Button.pinvalueE();
+    call Button.pinvalueF();
+    call readX.Read();
+    call readY.Read();
   }
 
   event void AMSend.sendDone(message_t* msg, error_t err) {
