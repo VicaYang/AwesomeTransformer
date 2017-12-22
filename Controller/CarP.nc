@@ -49,7 +49,6 @@ module CarP @safe() {
     error_t error = SUCCESS;
     signal Car.readDone(error, type);
   }
-// Anyone tell me what the hell are these three angle?
   command void Car.start() {
     angel1 = 1800;
     angel2 = 1800;
@@ -118,17 +117,11 @@ module CarP @safe() {
     m_value = value;
     return call Resource.request();
   }
-// What should I do. 
-//  command	error_t Car.QueryReader(uint16_t value) {
-//    type = 0x00;
-//    return SUCCESS;
-//  }
   command	error_t Car.Pause() {
     type = 0x06;
     m_value = 0x0000;
     return call Resource.request();
   }
-//  event void readDone(error_t state, uint16_t data);
 
   command	error_t Car.InitMaxSpeed(uint16_t value) {
     max_speed = value;

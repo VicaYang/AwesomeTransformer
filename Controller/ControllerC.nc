@@ -9,6 +9,7 @@ module ControllerC {
   uses interface AMSend;
   uses interface Receive;
   uses interface SplitControl as AMControl;
+  uses interface Timer<TMilli> as Timer0;
 }
 implementation {
 
@@ -19,6 +20,7 @@ implementation {
   event void Boot.booted() {
     call AMControl.start();
     call Car.start();
+    call Timer0.startPeriodic(1000);
   }
 
   event void AMControl.startDone(error_t err) {
@@ -32,7 +34,24 @@ implementation {
 
   event void AMSend.sendDone(message_t* msg, error_t err) {
   }
-
+  event void Timer0.fired() {
+    counter++;
+    if (counter % 5 == 0) {
+      call Car.Forward(300);
+    }
+    if (counter % 5 == 1) {
+      call Car.Backward(300);
+    }
+    if (counter % 5 == 2) {
+      call Car.Left(300);
+    }
+    if (counter % 5 == 3) {
+      call Car.Right(300);
+    }
+    if (counter % 5 == 4) {
+      call Car.Pause(0);
+    }
+  }
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
     if (len == sizeof(controller_msg_t)) {
       controller_msg_t* btrpkt = (controller_msg_t*)payload;

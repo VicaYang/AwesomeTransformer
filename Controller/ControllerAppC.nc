@@ -7,11 +7,14 @@ implementation {
   components LedsC;
   components ControllerC;
   components ActiveMessageC as AM;
+  components new TimerMilliC() as Timer0;
   components CarC;
 
   ControllerC.Boot -> MainC;
   ControllerC.Leds -> LedsC;
   ControllerC.Car -> CarC;
+  ControllerC.Timer0 -> Timer0;
+
 
   ControllerC.Packet -> AM;
   ControllerC.AMPacket -> AM.AMPacket;
