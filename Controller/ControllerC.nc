@@ -49,7 +49,7 @@ implementation {
       call Car.Right(300);
     }
     if (counter % 5 == 4) {
-      call Car.Pause(0);
+      call Car.Pause();
     }
     call Car.read();
   }

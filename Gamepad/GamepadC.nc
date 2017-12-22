@@ -133,8 +133,8 @@ module GamepadC {
     call Button.pinvalueD();
     call Button.pinvalueE();
     call Button.pinvalueF();
-    call readX.Read();
-    call readY.Read();
+    call readX.read();
+    call readY.read();
   }
 
   event void AMSend.sendDone(message_t* msg, error_t err) {

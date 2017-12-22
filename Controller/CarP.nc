@@ -60,66 +60,82 @@ module CarP @safe() {
     call Car.InitLeftServo(angel3);
   }
   command error_t Car.Angle(uint16_t value) {
-    type = 0x01;
-    if (value == 1) {
-      angel1 -= 100;
-    } else {
-      angel1 += 100;
+    atomic {
+      type = 0x01;
+      if (value == 1) {
+        angel1 -= 100;
+      } else {
+        angel1 += 100;
+      }
     }
     m_value = angel1;
     return call Resource.request();
   }
   command error_t Car.Angle_Senc(uint16_t value) {
-    type = 0x07;
-    if (value == 1) {
-      angel2 -= 100;
-    } else {
-      angel2 += 100;
+    atomic {
+      type = 0x07;
+      if (value == 1) {
+        angel2 -= 100;
+      } else {
+        angel2 += 100;
+      }
+      m_value = angel2;
     }
-    m_value = angel2;
     return call Resource.request();
   }
   command error_t Car.Angle_Third(uint16_t value) {
-    type = 0x08;
-    if (value == 1) {
-      angel3 -= 100;
-    } else {
-      angel3 += 100;
+    atomic {
+      type = 0x08;
+      if (value == 1) {
+        angel3 -= 100;
+      } else {
+        angel3 += 100;
+      }
+      m_value = angel3;
     }
-    m_value = angel3;
     return call Resource.request();
   }
   command error_t Car.Forward(uint16_t value) {
-    type = 0x02;
-    if (value < min_speed)
-      value = min_speed;
-    if (value > max_speed)
-      value = max_speed;
-    m_value = value;
+    atomic {
+      type = 0x02;
+      if (value < min_speed)
+        value = min_speed;
+      if (value > max_speed)
+        value = max_speed;
+      m_value = value;
+    }
     return call Resource.request();
   }
   command	error_t Car.Backward(uint16_t value) {
-    type = 0x03;
-    if (value < min_speed)
-      value = min_speed;
-    if (value > max_speed)
-      value = max_speed;
-    m_value = value;
+    atomic {
+      type = 0x03;
+      if (value < min_speed)
+        value = min_speed;
+      if (value > max_speed)
+        value = max_speed;
+      m_value = value;
+    }
     return call Resource.request();
   }
   command	error_t Car.Left(uint16_t value) {
-    type = 0x04;
-    m_value = value;
+    atomic {
+      type = 0x04;
+      m_value = value;
+    }
     return call Resource.request();
   }
   command	error_t Car.Right(uint16_t value) {
-    type = 0x05;
-    m_value = value;
+    atomic {
+      type = 0x05;
+      m_value = value;
+    }
     return call Resource.request();
   }
   command	error_t Car.Pause() {
-    type = 0x06;
-    m_value = 0x0000;
+    atomic {
+      type = 0x06;
+      m_value = 0x0000;
+    }
     return call Resource.request();
   }
 
