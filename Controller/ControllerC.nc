@@ -51,6 +51,7 @@ implementation {
     if (counter % 5 == 4) {
       call Car.Pause(0);
     }
+    call Car.read();
   }
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
     if (len == sizeof(controller_msg_t)) {
