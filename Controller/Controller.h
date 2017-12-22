@@ -3,7 +3,13 @@
 
 enum {
   AM_CONTROLLER = 88,
-  CAR_NODE = 0
+  CAR_NODE = 0,
+  THRESHOLD = 1600,
+  XMIN = THRESHOLD,
+  XMAX = 4095 - THRESHOLD,
+  YMIN = THRESHOLD,
+  YMAX = 4095 - THRESHOLD,
+  INTERVAL = 250
 };
 
 typedef nx_struct ControllerMsg {

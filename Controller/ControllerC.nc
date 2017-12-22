@@ -18,6 +18,7 @@ implementation {
 
   event void Boot.booted() {
     call AMControl.start();
+    call Car.start();
   }
 
   event void AMControl.startDone(error_t err) {
@@ -30,7 +31,6 @@ implementation {
   }
 
   event void AMSend.sendDone(message_t* msg, error_t err) {
-    // useless?
   }
 
   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){

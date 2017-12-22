@@ -16,6 +16,9 @@ module CarP @safe() {
   uint16_t m_value;
   uint16_t max_speed;
   uint16_t min_speed;
+  uint16_t angel1;
+  uint16_t angel2;
+  uint16_t angel3;
 
   const msp430_uart_union_config_t config1 = {
     utxe: 1,
@@ -45,19 +48,44 @@ module CarP @safe() {
     signal readDone(error, type);
   }
 // Anyone tell me what the hell are these three angle?
+  command void Car.start() {
+    angel1 = 1800;
+    angel2 = 1800;
+    angel3 = 1800;
+    call Car.InitMaxSpeed(800);
+    call Car.InitMinSpeed(0);
+    call Car.InitLeftServo(angel1);
+    call Car.InitRightServo(angel2);
+    call Car.InitLeftServo(angel3);
+  }
   command error_t Car.Angle(uint16_t value) {
     type = 0x01;
-    m_value = value;
+    if (value == 1) {
+      angel1 -= 100;
+    } else {
+      angel1 += 100;
+    }
+    m_value = angel1;
     return call Resource.request();
   }
   command error_t Car.Angle_Senc(uint16_t value) {
     type = 0x07;
-    m_value = value;
+    if (value == 1) {
+      angel2 -= 100;
+    } else {
+      angel2 += 100;
+    }
+    m_value = angel2;
     return call Resource.request();
   }
   command error_t Car.Angle_Third(uint16_t value) {
     type = 0x08;
-    m_value = value;
+    if (value == 1) {
+      angel3 -= 100;
+    } else {
+      angel3 += 100;
+    }
+    m_value = angel3;
     return call Resource.request();
   }
   command error_t Car.Forward(uint16_t value) {
