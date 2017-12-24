@@ -31,7 +31,7 @@ module GamepadC {
       if (btrpkt == NULL) {
       	return;
       }
-      call Leds.led0Toggle();
+      //call Leds.led0Toggle();
       btrpkt->type = type;
       btrpkt->value = value;
       if (call AMSend.send(AM_BROADCAST_ADDR, &pkt, sizeof(controller_msg_t)) == SUCCESS) {
@@ -81,60 +81,62 @@ module GamepadC {
     if (btn[0] == TRUE && btn[2] == TRUE && btn[4] == TRUE) {
       type = 0x10;
       value = 0;
-      stop = FALSE;
+      call Leds.set(7);
       sendPkt();
       return;
     }
     if (btn[0] == TRUE) {
       type = 0x01;
       value = 0;
-      stop = FALSE;
+      call Leds.set(1);
       sendPkt();
       return;
     }
     if (btn[1] == TRUE) {
       type = 0x01;
       value = 1;
-      stop = FALSE;
+      call Leds.set(2);
       sendPkt();
       return;
     }
     if (btn[2] == TRUE) {
-      type = 0x07;
-      value = 0;
-      stop = FALSE;
-      sendPkt();
-      return;
-    }
-    if (btn[3] == TRUE) {
-      type = 0x07;
-      value = 1;
-      stop = FALSE;
-      sendPkt();
-      return;
-    }
-    if (btn[4] == TRUE) {
       type = 0x08;
       value = 0;
-      stop = FALSE;
+      call Leds.set(3);
+      sendPkt();
+      return;
+    }
+    /*if (btn[3] == TRUE) {
+      type = 0x08;
+      value = 1;
+      call Leds.set(4);
+      sendPkt();
+      return;
+    }*/
+    // The button in gamepad is broken...
+    if (btn[4] == TRUE) {
+      type = 0x07;
+      value = 0;
+      call Leds.set(5);
       sendPkt();
       return;
     }
     if (btn[5] == TRUE) {
-      type = 0x08;
+      type = 0x07;
       value = 1;
       stop = FALSE;
+      call Leds.set(6);
       sendPkt();
       return;
     }
-    
   }
   event void Boot.booted() {
     busy = FALSE;
     stop = TRUE;
-    call Leds.set(7);
+    call Leds.set(0);
     rd[0] = rd[1] = rd[2] = rd[3] = rd[4] = rd[5] = rd[6] = rd[7] = FALSE;
     btn[0] = btn[1] = btn[2] = btn[3] = btn[4] = btn[5] = FALSE;
+    call Button.start();
     call AMControl.start();
     call Timer0.startPeriodic(INTERVAL);
   }

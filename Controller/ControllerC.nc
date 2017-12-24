@@ -86,30 +86,39 @@ implementation {
       switch (btrpkt->type) {
         case 0x01:
           call Car.Angle(btrpkt->value);
+          call Car.read();
           break;
         case 0x02:
           call Car.Forward(btrpkt->value);
+          call Car.read();
           break;
         case 0x03:
           call Car.Backward(btrpkt->value);
+          call Car.read();
           break;
         case 0x04:
           call Car.Left(btrpkt->value);
+          call Car.read();
           break;
         case 0x05:
           call Car.Right(btrpkt->value);
+          call Car.read();
           break;
         case 0x06:
           call Car.Pause();
+          call Car.read();
           break;
         case 0x07:
           call Car.Angle_Senc(btrpkt->value);
+          call Car.read();
           break;
         case 0x08:
           call Car.Angle_Third(btrpkt->value);
+          call Car.read();
           break;
         case 0x10:
           call Car.Home();
+          call Car.read();
           break;
       }
     }
@@ -117,7 +126,35 @@ implementation {
   }
   event void Car.readDone(error_t error, uint8_t data) {
     if (error == SUCCESS) {
-      call Leds.set(data);
+      switch(data) {
+        case 0x02:
+          call Leds.set(2);
+          break;
+        case 0x03:
+          call Leds.set(6);
+          break;
+        case 0x04:
+          call Leds.set(4);
+          break;
+        case 0x05:
+          call Leds.set(1);
+          break;
+        case 0x06:
+          call Leds.set(0);
+          break;
+        case 0x01:
+          call Leds.set(3);
+          break;
+        case 0x07:
+          call Leds.set(5);
+          break;
+        case 0x08:
+          call Leds.set(7);
+          break;
+        default:
+          call Leds.set(0);
+          break;
+      }
     }
   }
 }
